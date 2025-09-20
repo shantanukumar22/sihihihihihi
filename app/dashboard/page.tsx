@@ -36,7 +36,7 @@ export default function Dashboard() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
     };
-  }, [user]); // Removed refreshUser from dependencies
+  }, [user, refreshUser]);
 
   const handleLogout = async () => {
     await logout();

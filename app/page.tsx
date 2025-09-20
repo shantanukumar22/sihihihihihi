@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSession } from "@/lib/session";
 import { useRouter } from "next/navigation";
 import { CrowdCanvas } from "@/components/ui/skiper-ui/skiper39";
-import DecryptedText from "@/components/ui/Decryptedtext";
+import DecryptedText from "@/components/ui/DecryptedText";
 import TrueFocus from "@/components/ui/TrueFocus";
 import { useState, useEffect } from "react";
 import CircularGallery from "@/components/ui/CircularGallery";
@@ -59,91 +59,10 @@ const LoadingIcon = () => {
 export default function Home() {
   const { user, isLoading } = useSession();
   const router = useRouter();
-  const [featureCards, setFeatureCards] = useState<{ image: string; text: string }[]>([]);
   const [userPlatform, setUserPlatform] = useState<'windows' | 'linux' | 'mac' | 'unknown'>('unknown');
 
-  // Generate feature cards on client side
+  // Detect user platform
   useEffect(() => {
-    const generateFeatureCardImage = (
-      title: string,
-      description: string,
-      icon: string,
-      bgColor: string = '#1e293b',
-      accentColor: string = '#3b82f6'
-    ): string => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return '';
-
-      canvas.width = 800;
-      canvas.height = 600;
-
-      // Background gradient
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, bgColor);
-      gradient.addColorStop(1, '#0f172a');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Icon background circle
-      const centerX = canvas.width / 2;
-      const centerY = 180;
-      const iconRadius = 60;
-
-      const iconGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, iconRadius);
-      iconGradient.addColorStop(0, accentColor);
-      iconGradient.addColorStop(1, '#1d4ed8');
-
-      ctx.fillStyle = iconGradient;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, iconRadius, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Icon
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 48px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(icon, centerX, centerY);
-
-      // Title
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 42px Arial';
-      ctx.fillText(title, centerX, 320);
-
-      // Description
-      ctx.fillStyle = '#cbd5e1';
-      ctx.font = '24px Arial';
-      const words = description.split(' ');
-      const maxWidth = canvas.width - 100;
-      let line = '';
-      let y = 380;
-      const lineHeight = 35;
-
-      for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + ' ';
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
-
-        if (testWidth > maxWidth && n > 0) {
-          ctx.fillText(line, centerX, y);
-          line = words[n] + ' ';
-          y += lineHeight;
-        } else {
-          line = testLine;
-        }
-      }
-      ctx.fillText(line, centerX, y);
-
-      // Border
-      ctx.strokeStyle = accentColor;
-      ctx.lineWidth = 4;
-      ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
-
-      return canvas.toDataURL();
-    };
-
-    // Detect user platform
     const detectPlatform = () => {
       const userAgent = navigator.userAgent.toLowerCase();
       if (userAgent.includes('win')) {
