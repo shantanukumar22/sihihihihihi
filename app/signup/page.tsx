@@ -96,38 +96,41 @@ export default function SignUp() {
   // Show loading state while session is being checked
   if (sessionLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-100 flex items-center justify-center px-6">
+      <div className="min-h-screen bg-gray-300 flex items-center justify-center px-6">
         <div className="text-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-6">
+            <span className="text-white font-bold text-2xl">SW</span>
+          </div>
           <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading...</p>
+          <p className="text-slate-700 font-medium">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-100 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-gray-300 flex items-center justify-center px-6">
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-3">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">CW</span>
+              <span className="text-white font-bold text-lg">SW</span>
             </div>
-            <span className="text-3xl font-bold text-slate-900">CleanWipe</span>
+            <span className="text-3xl font-bold text-slate-900">SecureWipe</span>
           </Link>
         </div>
 
         {/* Sign Up Form */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-slate-200 p-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h1>
-            <p className="text-slate-600">Join CleanWipe for secure data erasure solutions</p>
+            <p className="text-slate-600">Join SecureWipe for secure data erasure solutions</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="officialName" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="officialName" className="block text-sm font-semibold text-slate-800 mb-2">
                 Official Full Name *
               </label>
               <input
@@ -136,18 +139,19 @@ export default function SignUp() {
                 name="officialName"
                 value={formData.officialName}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                  errors.officialName ? 'border-red-300 bg-red-50' : 'border-slate-300 hover:border-slate-400'
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
+                  errors.officialName ? 'border-red-400 bg-red-50 focus:ring-red-500' : 'border-slate-300 hover:border-slate-400 bg-white'
                 }`}
                 placeholder="Enter your official full name"
+                required
               />
               {errors.officialName && (
-                <p className="mt-1 text-sm text-red-600">{errors.officialName}</p>
+                <p className="mt-2 text-sm text-red-600 font-medium">{errors.officialName}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-slate-800 mb-2">
                 Email Address *
               </label>
               <input
@@ -156,18 +160,19 @@ export default function SignUp() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                  errors.email ? 'border-red-300 bg-red-50' : 'border-slate-300 hover:border-slate-400'
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
+                  errors.email ? 'border-red-400 bg-red-50 focus:ring-red-500' : 'border-slate-300 hover:border-slate-400 bg-white'
                 }`}
                 placeholder="Enter your email address"
+                required
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                <p className="mt-2 text-sm text-red-600 font-medium">{errors.email}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-slate-800 mb-2">
                 Password *
               </label>
               <input
@@ -176,18 +181,19 @@ export default function SignUp() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                  errors.password ? 'border-red-300 bg-red-50' : 'border-slate-300 hover:border-slate-400'
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
+                  errors.password ? 'border-red-400 bg-red-50 focus:ring-red-500' : 'border-slate-300 hover:border-slate-400 bg-white'
                 }`}
-                placeholder="Create a secure password"
+                placeholder="Create a secure password (min 8 characters)"
+                required
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                <p className="mt-2 text-sm text-red-600 font-medium">{errors.password}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-semibold text-slate-800 mb-2">
                 Confirm Password *
               </label>
               <input
@@ -196,39 +202,52 @@ export default function SignUp() {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                  errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-slate-300 hover:border-slate-400'
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
+                  errors.confirmPassword ? 'border-red-400 bg-red-50 focus:ring-red-500' : 'border-slate-300 hover:border-slate-400 bg-white'
                 }`}
                 placeholder="Confirm your password"
+                required
               />
               {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                <p className="mt-2 text-sm text-red-600 font-medium">{errors.confirmPassword}</p>
               )}
             </div>
 
             {errors.general && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-sm text-red-600">{errors.general}</p>
+              <div className="bg-red-50 border border-red-300 rounded-xl p-4">
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <p className="text-sm text-red-700 font-medium">{errors.general}</p>
+                </div>
               </div>
             )}
 
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 ${
+              className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 transform ${
                 isLoading 
                   ? 'bg-slate-400 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl'
+                  : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
               }`}
             >
-              {isLoading ? 'Creating Account...' : 'Create Account'}
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Creating Account...
+                </div>
+              ) : (
+                'Create Account'
+              )}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-8 text-center">
             <p className="text-slate-600">
               Already have an account?{' '}
-              <Link href="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
+              <Link href="/login" className="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-200">
                 Sign in
               </Link>
             </p>
