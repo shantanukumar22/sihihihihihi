@@ -1,24 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth';
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 export async function POST(request: NextRequest) {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     // Get token from cookies
     const token = request.cookies.get('token')?.value;
     
     if (!token) {
-      return NextResponse.json({ success: false, error: 'Authentication required' }, { status: 401 });
+      const response = NextResponse.json({ success: false, error: 'Authentication required' }, { status: 401 });
+      return addCorsHeaders(response);
     }
 
     const user = verifyToken(token);
     if (!user) {
-      return NextResponse.json({ success: false, error: 'Invalid token' }, { status: 401 });
+      const response = NextResponse.json({ success: false, error: 'Invalid token' }, { status: 401 });
+      return addCorsHeaders(response);
     }
 
     const { aadharNumber, otp } = await request.json();
 
     if (!aadharNumber || !otp) {
-      return NextResponse.json({ success: false, error: 'Aadhar number and OTP are required' }, { status: 400 });
+      const response = NextResponse.json({ success: false, error: 'Aadhar number and OTP are required' }, { status: 400 });
+      return addCorsHeaders(response);
     }
 
     // Simulate DigiLocker API call
@@ -39,17 +47,19 @@ export async function POST(request: NextRequest) {
     // Generate a unique verification code
     const verificationCode = `CW-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: mockVerification.data,
       verificationCode: verificationCode
     });
+    return addCorsHeaders(response);
 
   } catch (error) {
     console.error('Aadhar verification error:', error);
-    return NextResponse.json(
+    const response = NextResponse.json(
       { success: false, error: 'Aadhar verification failed' },
       { status: 500 }
     );
+    return addCorsHeaders(response);
   }
 }

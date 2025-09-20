@@ -2,6 +2,7 @@
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import axios, { AxiosResponse } from "axios";
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 // Define types for DigiLocker document download response
 interface DocumentDownloadResponse {
@@ -31,6 +32,10 @@ interface DocumentDownloadResponse {
 // }
 
 export async function POST(request: NextRequest): Promise<Response> {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     // Get request data with file IDs
     const requestData = await request.json();
@@ -38,7 +43,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
     // Validate request
     if (!aadhaarFileId || !panFileId) {
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           aadhaar: null,
@@ -47,6 +52,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     // Get the client_id from cookies
@@ -54,7 +60,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     const clientId = cookieStore.get("digilocker_client_id")?.value;
 
     if (!clientId) {
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           aadhaar: null,
@@ -63,6 +69,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         },
         { status: 401 }
       );
+      return addCorsHeaders(response);
     }
 
     // Get the API token from environment variables
@@ -71,7 +78,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
     if (!apiToken) {
       console.error("Missing SUREPASS_API_TOKEN environment variable");
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           aadhaar: null,
@@ -81,11 +88,12 @@ export async function POST(request: NextRequest): Promise<Response> {
         },
         { status: 500 }
       );
+      return addCorsHeaders(response);
     }
 
     if (!baseUrl) {
       console.error("Missing SUREPASS_BASE_URL environment variable");
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           aadhaar: null,
@@ -95,6 +103,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         },
         { status: 500 }
       );
+      return addCorsHeaders(response);
     }
 
     // Function to download a document with retries
@@ -149,20 +158,22 @@ export async function POST(request: NextRequest): Promise<Response> {
         aadhaarResponse?.data?.data?.download_url &&
         panResponse?.data?.data?.download_url
       ) {
-        return Response.json({
+        const response = Response.json({
           success: true,
           aadhaar: aadhaarResponse.data.data,
           pan: panResponse.data.data,
         });
+        return addCorsHeaders(response);
       }
 
       // If any download failed, return error
-      return Response.json({
+      const response = Response.json({
         success: false,
         aadhaar: aadhaarResponse?.data?.data || null,
         pan: panResponse?.data?.data || null,
         message: "Failed to download one or more documents",
       });
+      return addCorsHeaders(response);
     } catch (error) {
       console.error("Error downloading documents:", error);
 
@@ -176,33 +187,36 @@ export async function POST(request: NextRequest): Promise<Response> {
           errorMessage = "Document download service is temporarily unavailable. Please try again in a few minutes.";
         }
 
-        return Response.json({
+        const response = Response.json({
           success: false,
           aadhaar: null,
           pan: null,
           message: "Failed to download documents",
           error: errorMessage,
         }, { status });
+        return addCorsHeaders(response);
       }
 
       // Handle other errors
-      return Response.json({
+      const response = Response.json({
         success: false,
         aadhaar: null,
         pan: null,
         message: "Failed to download documents",
         error: error instanceof Error ? error.message : "Unknown error",
       }, { status: 500 });
+      return addCorsHeaders(response);
     }
   } catch (error) {
     console.error("Error in document download route:", error);
 
-    return Response.json({
+    const response = Response.json({
       success: false,
       aadhaar: null,
       pan: null,
       message: "Failed to download documents",
       error: error instanceof Error ? error.message : "Unknown error",
     }, { status: 500 });
+    return addCorsHeaders(response);
   }
 }

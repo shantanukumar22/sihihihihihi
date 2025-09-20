@@ -1,6 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     const response = NextResponse.json({
       success: true,
@@ -15,12 +20,13 @@ export async function POST() {
       maxAge: 0 // Expire immediately
     });
 
-    return response;
+    return addCorsHeaders(response);
   } catch (error) {
     console.error('Logout error:', error);
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
+    return addCorsHeaders(response);
   }
 }

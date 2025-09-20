@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import axios from "axios";
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 interface RequestData {
   fullName: string;
@@ -44,6 +45,10 @@ interface ErrorResponse {
 }
 
 export async function POST(request: NextRequest): Promise<Response> {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     // Get the form data from the request
     const requestData: RequestData = await request.json();
@@ -143,7 +148,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
         try {
           // Make the request to the DigiLocker API using axios with timeout
-          const response = await axios.post(
+          const axiosResponse = await axios.post(
             `${baseUrl}/api/v1/digilocker/initialize`,
             body,
             {
@@ -160,10 +165,10 @@ export async function POST(request: NextRequest): Promise<Response> {
           // Clear the timeout since request completed
           clearTimeout(timeoutId);
 
-          console.log(`DigiLocker initialization attempt ${attempt + 1} successful:`, response.data);
+          console.log(`DigiLocker initialization attempt ${attempt + 1} successful:`, axiosResponse.data);
 
           // Axios automatically parses JSON response
-          const data: DigiLockerResponse = response.data;
+          const data: DigiLockerResponse = axiosResponse.data;
 
           // If the response is successful, set the cookies with proper expiry
           if (data.success) {
@@ -196,7 +201,8 @@ export async function POST(request: NextRequest): Promise<Response> {
           }
 
           // Return the response data
-          return Response.json(data);
+          const response = Response.json(data);
+          return addCorsHeaders(response);
         } finally {
           clearTimeout(timeoutId);
         }
@@ -235,7 +241,8 @@ export async function POST(request: NextRequest): Promise<Response> {
         error: errorMessage,
       };
 
-      return Response.json(errorResponse, { status });
+      const response = Response.json(errorResponse, { status });
+      return addCorsHeaders(response);
     }
 
     // Handle other errors
@@ -247,7 +254,8 @@ export async function POST(request: NextRequest): Promise<Response> {
       error: errorMessage,
     };
 
-    return Response.json(errorResponse, { status: 500 });
+    const response = Response.json(errorResponse, { status: 500 });
+    return addCorsHeaders(response);
   } catch (error) {
     console.error("Error in DigiLocker initialization route:", error);
 
@@ -257,6 +265,7 @@ export async function POST(request: NextRequest): Promise<Response> {
       error: error instanceof Error ? error.message : "Unknown error",
     };
 
-    return Response.json(errorResponse, { status: 500 });
+    const response = Response.json(errorResponse, { status: 500 });
+    return addCorsHeaders(response);
   }
 }

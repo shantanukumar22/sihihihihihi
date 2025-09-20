@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 export async function POST(request: NextRequest) {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     // Parse the request body
     const body = await request.json();
@@ -22,18 +27,20 @@ export async function POST(request: NextRequest) {
     );
 
     // Return the response data
-    return NextResponse.json({
+    const responseData = NextResponse.json({
       success: true,
       data: response.data.data,
     });
+    return addCorsHeaders(responseData);
   } catch (error: unknown) {
     console.error("Error verifying PAN:", error);
-    return NextResponse.json(
+    const responseData = NextResponse.json(
       {
         success: false,
         message: (error as { response?: { data?: { message?: string } } })?.response?.data?.message || "Failed to verify PAN",
       },
       { status: 500 }
     );
+    return addCorsHeaders(responseData);
   }
 }

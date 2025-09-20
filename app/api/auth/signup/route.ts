@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 export async function POST(request: NextRequest) {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     await connectDB();
 
@@ -14,27 +19,30 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!officialName || !email || !password) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'User with this email already exists' },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     // Validate password length
     if (password.length < 8) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Password must be at least 8 characters long' },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     // Create new user
@@ -78,12 +86,13 @@ export async function POST(request: NextRequest) {
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
-    return response;
+    return addCorsHeaders(response);
   } catch (error) {
     console.error('Signup error:', error);
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
+    return addCorsHeaders(response);
   }
 }

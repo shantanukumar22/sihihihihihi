@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     console.log('🔍 Test save verification endpoint called');
     
@@ -11,10 +16,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { userId, verificationCode } = body;
     
     if (!userId || !verificationCode) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { success: false, message: 'User ID and verification code are required' },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     console.log('🔍 Updating user ID:', userId, 'with verification code:', verificationCode);
@@ -39,13 +45,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     console.log('🔍 Updated user result:', updatedUser);
 
     if (!updatedUser) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { success: false, message: 'User not found' },
         { status: 404 }
       );
+      return addCorsHeaders(response);
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: 'Verification saved successfully',
       data: {
@@ -54,12 +61,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         digilockerVerifiedAt: updatedUser.digilockerVerifiedAt
       }
     });
+    return addCorsHeaders(response);
 
   } catch (error) {
     console.error('❌ Error saving verification:', error);
-    return NextResponse.json(
+    const response = NextResponse.json(
       { success: false, message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
+    return addCorsHeaders(response);
   }
 }

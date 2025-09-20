@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 export async function PUT(request: NextRequest) {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     await connectDB();
 
@@ -13,10 +18,11 @@ export async function PUT(request: NextRequest) {
     // Get token from cookie
     const token = request.cookies.get('token')?.value;
     if (!token) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
       );
+      return addCorsHeaders(response);
     }
 
     // Verify token
@@ -25,20 +31,22 @@ export async function PUT(request: NextRequest) {
     try {
       payload = jwt.verify(token, JWT_SECRET) as { id: string };
     } catch {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Invalid token' },
         { status: 401 }
       );
+      return addCorsHeaders(response);
     }
 
     const { dateOfBirth, securityQuestion, securityAnswer, phoneNumber } = await request.json();
 
     // Validate required fields
     if (!dateOfBirth || !securityQuestion || !securityAnswer || !phoneNumber) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     // Validate date of birth (18+ check)
@@ -46,19 +54,21 @@ export async function PUT(request: NextRequest) {
     const today = new Date();
     const age = today.getFullYear() - dob.getFullYear();
     if (age < 18) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'You must be at least 18 years old to use this service' },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     // Find and update user
     const user = await User.findById(payload.id);
     if (!user) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
+      return addCorsHeaders(response);
     }
 
     // Hash security answer
@@ -84,16 +94,18 @@ export async function PUT(request: NextRequest) {
       profileComplete: user.profileComplete
     };
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       user: userData,
       message: 'Profile setup completed successfully'
     });
+    return addCorsHeaders(response);
     } catch {
       console.error('Profile setup error:');
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
+      const response = NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 }
+      );
+      return addCorsHeaders(response);
+    }
 }

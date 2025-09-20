@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 import { verifySession } from '@/lib/auth-utils';
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 interface SaveVerificationRequest {
   verificationCode: string;
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     console.log('🔍 Save DigiLocker verification endpoint called');
     
@@ -17,10 +22,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     
     if (!sessionResult.success || !sessionResult.user) {
       console.log('❌ Session verification failed');
-      return NextResponse.json(
+      const response = NextResponse.json(
         { success: false, message: 'Unauthorized' },
         { status: 401 }
       );
+      return addCorsHeaders(response);
     }
 
     // Parse the request body
@@ -30,10 +36,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!verificationCode) {
       console.log('❌ No verification code provided');
-      return NextResponse.json(
+      const response = NextResponse.json(
         { success: false, message: 'Verification code is required' },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     // Connect to database
@@ -60,15 +67,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!updatedUser) {
       console.log('❌ User not found');
-      return NextResponse.json(
+      const response = NextResponse.json(
         { success: false, message: 'User not found' },
         { status: 404 }
       );
+      return addCorsHeaders(response);
     }
 
     console.log('✅ Verification saved successfully');
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: 'DigiLocker verification saved successfully',
       data: {
@@ -77,12 +85,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         digilockerVerifiedAt: updatedUser.digilockerVerifiedAt
       }
     });
+    return addCorsHeaders(response);
 
   } catch (error) {
     console.error('❌ Error saving DigiLocker verification:', error);
-    return NextResponse.json(
+    const response = NextResponse.json(
       { success: false, message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
+    return addCorsHeaders(response);
   }
 }

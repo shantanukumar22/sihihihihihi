@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 export async function GET(request: NextRequest) {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     await connectDB();
 
@@ -12,10 +17,11 @@ export async function GET(request: NextRequest) {
     // Get token from cookie
     const token = request.cookies.get('token')?.value;
     if (!token) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
       );
+      return addCorsHeaders(response);
     }
 
     // Verify token
@@ -24,19 +30,21 @@ export async function GET(request: NextRequest) {
     try {
       payload = jwt.verify(token, JWT_SECRET) as { id: string };
     } catch {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Invalid token' },
         { status: 401 }
       );
+      return addCorsHeaders(response);
     }
 
     // Find user
     const user = await User.findById(payload.id);
     if (!user) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
+      return addCorsHeaders(response);
     }
 
     // Return user data (excluding password and security answer)
@@ -53,15 +61,17 @@ export async function GET(request: NextRequest) {
       digilockerVerifiedAt: user.digilockerVerifiedAt
     };
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       user: userData
     });
+    return addCorsHeaders(response);
     } catch {
       console.error('Get user error:');
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
+      const response = NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 }
+      );
+      return addCorsHeaders(response);
+    }
 }

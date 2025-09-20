@@ -1,6 +1,8 @@
 // File: app/api/digilocker/list-documents/route.ts
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 import axios from "axios";
+import { addCorsHeaders, handleCors } from '@/lib/cors';
 
 // Define types for DigiLocker list documents response
 interface DigiLockerDocument {
@@ -33,7 +35,11 @@ interface FilteredDocumentsResponse {
   missingDocuments?: string[];
 }
 
-export async function GET(): Promise<Response> {
+export async function GET(request: NextRequest): Promise<Response> {
+  // Handle CORS preflight
+  const corsResponse = handleCors(request);
+  if (corsResponse) return corsResponse;
+
   try {
     // Get the client_id from cookies
     const cookieStore = await cookies();
@@ -41,7 +47,7 @@ export async function GET(): Promise<Response> {
     const token = cookieStore.get("digilocker_token")?.value;
 
     if (!clientId || !token) {
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           documents: [],
@@ -51,6 +57,7 @@ export async function GET(): Promise<Response> {
         },
         { status: 401 }
       );
+      return addCorsHeaders(response);
     }
 
     // Get the API token from environment variables
@@ -58,7 +65,7 @@ export async function GET(): Promise<Response> {
 
     if (!apiToken) {
       console.error("Missing SUREPASS_API_TOKEN environment variable");
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           documents: [],
@@ -69,10 +76,11 @@ export async function GET(): Promise<Response> {
         },
         { status: 500 }
       );
+      return addCorsHeaders(response);
     }
 
     // Make the request to the DigiLocker API using axios
-    const response = await axios.get<ListDocumentsResponse>(
+    const axiosResponse = await axios.get<ListDocumentsResponse>(
       `https://kyc-api.surepass.io/api/v1/digilocker/list-documents/${clientId}`,
       {
         headers: {
@@ -82,10 +90,10 @@ export async function GET(): Promise<Response> {
     );
 
     // Extract the documents from the response
-    const { data } = response;
+    const { data } = axiosResponse;
 
     if (!data.success) {
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           documents: [],
@@ -95,6 +103,7 @@ export async function GET(): Promise<Response> {
         },
         { status: 400 }
       );
+      return addCorsHeaders(response);
     }
 
     // Find Aadhaar and PAN documents
@@ -139,7 +148,7 @@ export async function GET(): Promise<Response> {
 
     // If any documents are missing, return an error
     if (missingDocuments.length > 0) {
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           documents,
@@ -150,6 +159,7 @@ export async function GET(): Promise<Response> {
         },
         { status: 422 }
       );
+      return addCorsHeaders(response);
     }
 
     // Return the filtered response with both documents found
@@ -160,7 +170,8 @@ export async function GET(): Promise<Response> {
       panFileId,
     };
 
-    return Response.json(filteredResponse);
+    const response = Response.json(filteredResponse);
+    return addCorsHeaders(response);
   } catch (error) {
     console.error("Error fetching DigiLocker documents:", error);
 
@@ -169,7 +180,7 @@ export async function GET(): Promise<Response> {
       const status = error.response?.status || 500;
       const errorMessage = error.response?.data?.message || error.message;
 
-      return Response.json(
+      const response = Response.json(
         {
           success: false,
           documents: [],
@@ -180,13 +191,14 @@ export async function GET(): Promise<Response> {
         },
         { status }
       );
+      return addCorsHeaders(response);
     }
 
     // Handle other errors
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
 
-    return Response.json(
+    const response = Response.json(
       {
         success: false,
         documents: [],
@@ -197,5 +209,6 @@ export async function GET(): Promise<Response> {
       },
       { status: 500 }
     );
+    return addCorsHeaders(response);
   }
 }
