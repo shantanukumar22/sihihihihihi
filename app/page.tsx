@@ -13,7 +13,7 @@ export default function Home() {
       if (user.profileComplete) {
         router.push('/dashboard');
       } else {
-        router.push('/profile-setup');
+        router.push('/dashboard');
       }
     } else {
       router.push('/signup');

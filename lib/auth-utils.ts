@@ -105,12 +105,12 @@ export function getRedirectUrl(user: AuthenticatedUser | null, currentPath: stri
     return '/login';
   }
   
-  if (!user.profileComplete && currentPath !== '/profile-setup') {
+  if (!user.profileComplete && currentPath !== '/dashboard') {
     // Profile not complete - redirect to profile setup
-    return '/profile-setup';
+    return '/dashboard';
   }
   
-  if (user.profileComplete && currentPath === '/profile-setup') {
+  if (user.profileComplete && currentPath === '/dashboard') {
     // Profile complete but on profile setup - redirect to dashboard
     return '/dashboard';
   }

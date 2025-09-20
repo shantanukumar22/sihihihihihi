@@ -78,7 +78,7 @@ export class ApiClient {
     securityAnswer: string;
     phoneNumber: string;
   }): Promise<ApiResponse> {
-    return this.request('/auth/profile-setup', {
+    return this.request('/auth/dashboard', {
       method: 'PUT',
       body: JSON.stringify(profileData),
     });

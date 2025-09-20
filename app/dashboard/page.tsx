@@ -167,7 +167,7 @@ export default function Dashboard() {
     if (!isLoading && !user) {
       router.replace('/login');
     } else if (user && !user.profileComplete) {
-      router.replace('/profile-setup');
+      router.replace('/dashboard');
     }
   }, [user, isLoading, router]);
 

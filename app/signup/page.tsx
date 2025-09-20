@@ -24,7 +24,7 @@ export default function SignUp() {
       if (user.profileComplete) {
         router.replace('/dashboard');
       } else {
-        router.replace('/profile-setup');
+        router.replace('/dashboard');
       }
     }
   }, [user, sessionLoading, router]);
@@ -82,7 +82,7 @@ export default function SignUp() {
 
       if (response.success && response.user) {
         login(response.user);
-        router.replace('/profile-setup');
+        router.replace('/dashboard');
       } else {
         setErrors({ general: response.error || 'Signup failed' });
       }

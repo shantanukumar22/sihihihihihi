@@ -23,7 +23,7 @@ export default function Login() {
       if (user.profileComplete) {
         router.replace('/dashboard');
       } else {
-        router.replace('/profile-setup');
+        router.replace('/dashboard');
       }
     }
   }, [user, sessionLoading, router]);
@@ -84,7 +84,7 @@ export default function Login() {
         if (userData.profileComplete) {
           router.replace('/dashboard');
         } else {
-          router.replace('/profile-setup');
+          router.replace('/dashboard');
         }
       } else {
         setErrors({ general: response.error || 'Login failed' });
