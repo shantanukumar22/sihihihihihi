@@ -5,33 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ApiClient } from '@/lib/api';
 import { useSession } from '@/lib/session';
-import { 
-  Shield, 
-  HardDrive, 
-  FileText, 
-  Trash2, 
-  Settings, 
-  User, 
-  LogOut, 
-  Plus, 
-  CheckCircle, 
-  AlertCircle,
-  ArrowRight,
-  Sparkles,
-  BarChart3,
-  Smartphone,
-  Laptop,
-  Monitor,
-  Zap,
-  Lock,
-  Download,
-  Eye,
-  RefreshCw
-} from 'lucide-react';
-import Button from '@/app/components/ui/Button';
-import Card, { CardContent, CardHeader } from '@/app/components/ui/Card';
-import StatsCard from '@/app/components/ui/StatsCard';
-import ThemeToggle from '@/app/components/ui/ThemeToggle';
 
 // Aadhar Verification Form Component
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -258,205 +231,136 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-800 flex items-center justify-center transition-colors duration-300">
-        <div className="text-center animate-fade-in-up">
-          <div className="w-12 h-12 border-4 border-blue-600 dark:border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300 text-lg">Loading dashboard...</p>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   const renderOverview = () => (
-    <div className="space-y-8">
-      {/* Welcome Section */}
-      <div className="animate-fade-in-up">
-        <Card className="p-8 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 text-white shadow-xl">
-          <CardContent>
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.officialName?.split(' ')[0]}!</h2>
-                <p className="text-blue-100 dark:text-blue-200">Ready to secure your devices with professional data erasure?</p>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-600">Verification Status</p>
+              <p className={`text-lg font-bold ${user?.digilockerVerified ? 'text-green-600' : 'text-orange-600'}`}>
+                {user?.digilockerVerified ? 'Verified' : 'Pending'}
+              </p>
+            </div>
+            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+              user?.digilockerVerified ? 'bg-green-100' : 'bg-orange-100'
+            }`}>
+              <svg className={`w-6 h-6 ${user?.digilockerVerified ? 'text-green-600' : 'text-orange-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-600">Devices Processed</p>
+              <p className="text-3xl font-bold text-slate-900">0</p>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-600">Certificates Generated</p>
+              <p className="text-3xl font-bold text-slate-900">0</p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-600">Data Wiped (GB)</p>
+              <p className="text-3xl font-bold text-slate-900">0</p>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <button className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-left">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
               </div>
-              <div className="w-16 h-16 bg-white/20 dark:bg-white/30 rounded-2xl flex items-center justify-center">
-                <Shield className="w-8 h-8 text-white" />
+              <div>
+                <p className="font-medium text-slate-900">Start New Wipe</p>
+                <p className="text-sm text-slate-600">Begin secure data erasure process</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </button>
+
+          <button className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-left">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-medium text-slate-900">View Certificates</p>
+                <p className="text-sm text-slate-600">Access wipe certificates</p>
+              </div>
+            </div>
+          </button>
+        </div>
       </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard
-          title="Verification Status"
-          value={user?.digilockerVerified ? 'Verified' : 'Pending'}
-          icon={<CheckCircle className="w-6 h-6" />}
-          color={user?.digilockerVerified ? 'green' : 'orange'}
-          delay={0}
-        />
-        
-        <StatsCard
-          title="Devices Processed"
-          value="0"
-          icon={<HardDrive className="w-6 h-6" />}
-          color="blue"
-          delay={200}
-        />
-        
-        <StatsCard
-          title="Certificates Generated"
-          value="0"
-          icon={<FileText className="w-6 h-6" />}
-          color="green"
-          delay={400}
-        />
-        
-        <StatsCard
-          title="Data Wiped (GB)"
-          value="0"
-          icon={<Trash2 className="w-6 h-6" />}
-          color="purple"
-          delay={600}
-        />
-      </div>
-
-      {/* Quick Actions */}
-      <Card className="p-6 animate-fade-in-up bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 dark:border-gray-700/20 shadow-xl" style={{ animationDelay: '0.8s' }}>
-        <CardHeader>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Zap className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            Quick Actions
-          </h3>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Button
-              variant="outline"
-              className="h-auto p-4 flex flex-col items-center text-center space-y-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-gray-200 dark:border-gray-600"
-            >
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Plus className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white">Start New Wipe</p>
-                <p className="text-xs text-gray-600 dark:text-gray-300">Begin secure data erasure</p>
-              </div>
-            </Button>
-
-            <Button
-              variant="outline"
-              className="h-auto p-4 flex flex-col items-center text-center space-y-2 hover:bg-green-50 dark:hover:bg-green-900/20 border-gray-200 dark:border-gray-600"
-            >
-              <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 rounded-xl flex items-center justify-center shadow-lg">
-                <FileText className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white">View Certificates</p>
-                <p className="text-xs text-gray-600 dark:text-gray-300">Access wipe certificates</p>
-              </div>
-            </Button>
-
-            <Button
-              variant="outline"
-              className="h-auto p-4 flex flex-col items-center text-center space-y-2 hover:bg-purple-50 dark:hover:bg-purple-900/20 border-gray-200 dark:border-gray-600"
-            >
-              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
-                <BarChart3 className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white">View Analytics</p>
-                <p className="text-xs text-gray-600 dark:text-gray-300">Track your progress</p>
-              </div>
-            </Button>
-
-            <Button
-              variant="outline"
-              className="h-auto p-4 flex flex-col items-center text-center space-y-2 hover:bg-orange-50 dark:hover:bg-orange-900/20 border-gray-200 dark:border-gray-600"
-            >
-              <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-400 dark:to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Download className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white">Download Tools</p>
-                <p className="text-xs text-gray-600 dark:text-gray-300">Get offline utilities</p>
-              </div>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 
   const renderDevices = () => (
     <div className="space-y-6">
-      <div className="flex justify-between items-center animate-fade-in-up">
-        <div>
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <HardDrive className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            Your Devices
-          </h3>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">Manage and secure your electronic devices</p>
-        </div>
-        <Button rightIcon={<Plus className="w-4 h-4" />}>
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg font-semibold text-slate-900">Your Devices</h3>
+        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
           Add Device
-        </Button>
+        </button>
       </div>
 
-      <Card className="p-8 animate-fade-in-up bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 dark:border-gray-700/20 shadow-xl" style={{ animationDelay: '0.2s' }}>
-        <CardContent>
-          <div className="text-center py-12">
-            <div className="w-20 h-20 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <HardDrive className="w-10 h-10 text-blue-600 dark:text-blue-400" />
-            </div>
-            <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-3">No devices found</h4>
-            <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-md mx-auto">
-              Start by adding your first device for secure data erasure. 
-              We support Windows, Linux, and Android devices.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button rightIcon={<Plus className="w-4 h-4" />}>
-                Add Your First Device
-              </Button>
-              <Button variant="secondary" rightIcon={<Eye className="w-4 h-4" />}>
-                View Supported Devices
-              </Button>
-            </div>
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+        <div className="text-center py-12">
+          <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+            </svg>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Device Types Preview */}
-      <div className="grid md:grid-cols-3 gap-6 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-        <Card hover className="p-6 text-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 dark:border-gray-700/20 shadow-lg hover:shadow-xl transition-all duration-300">
-          <CardContent>
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <Laptop className="w-6 h-6 text-white" />
-            </div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Windows Devices</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-300">Laptops, desktops, and tablets</p>
-          </CardContent>
-        </Card>
-
-        <Card hover className="p-6 text-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 dark:border-gray-700/20 shadow-lg hover:shadow-xl transition-all duration-300">
-          <CardContent>
-            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 dark:from-green-400 dark:to-green-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <Monitor className="w-6 h-6 text-white" />
-            </div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Linux Systems</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-300">Servers and workstations</p>
-          </CardContent>
-        </Card>
-
-        <Card hover className="p-6 text-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 dark:border-gray-700/20 shadow-lg hover:shadow-xl transition-all duration-300">
-          <CardContent>
-            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <Smartphone className="w-6 h-6 text-white" />
-            </div>
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Android Devices</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-300">Phones and tablets</p>
-          </CardContent>
-        </Card>
+          <h4 className="text-lg font-medium text-slate-900 mb-2">No devices found</h4>
+          <p className="text-slate-600 mb-6">Start by adding your first device for secure data erasure</p>
+          <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Add Your First Device
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -667,100 +571,107 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-800 transition-colors duration-300">
-      {/* Enhanced Header */}
-      <header className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-white/20 dark:border-gray-700/20 sticky top-0 z-50">
+    <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <header className="bg-white border-b border-slate-200">
         <div className="px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
-              <Link href="/" className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 rounded-xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-6 h-6 text-white" />
+              <Link href="/" className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">CW</span>
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">CleanWipe</span>
+                <span className="text-xl font-semibold text-slate-900">CleanWipe</span>
               </Link>
             </div>
 
             <div className="flex items-center space-x-4">
-              <ThemeToggle size="sm" />
               <div className="text-right">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">{user?.officialName}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{user?.email}</p>
+                <p className="text-sm font-medium text-slate-900">{user?.officialName}</p>
+                <p className="text-sm text-slate-600">{user?.email}</p>
               </div>
-              <Button
-                variant="ghost"
+              <button
                 onClick={handleLogout}
-                leftIcon={<LogOut className="w-4 h-4" />}
+                className="px-4 py-2 text-slate-600 hover:text-slate-900 transition-colors"
               >
                 Logout
-              </Button>
+              </button>
             </div>
           </div>
         </div>
       </header>
 
       <div className="flex">
-        {/* Enhanced Sidebar */}
-        <aside className="w-64 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-r border-white/20 dark:border-gray-700/20 min-h-screen transition-colors duration-300">
+        {/* Sidebar */}
+        <aside className="w-64 bg-white border-r border-slate-200 min-h-screen">
           <nav className="p-6">
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               <li>
                 <button
                   onClick={() => setActiveTab('overview')}
-                  className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                     activeTab === 'overview' 
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white shadow-lg' 
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    <BarChart3 className="w-5 h-5" />
-                    <span className="font-medium">Overview</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                    </svg>
+                    <span>Overview</span>
                   </div>
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => setActiveTab('devices')}
-                  className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                     activeTab === 'devices' 
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white shadow-lg' 
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    <HardDrive className="w-5 h-5" />
-                    <span className="font-medium">Devices</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                    </svg>
+                    <span>Devices</span>
                   </div>
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => setActiveTab('verification')}
-                  className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                     activeTab === 'verification' 
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white shadow-lg' 
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5" />
-                    <span className="font-medium">Aadhar Verification</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Aadhar Verification</span>
                   </div>
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => setActiveTab('settings')}
-                  className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                     activeTab === 'settings' 
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 text-white shadow-lg' 
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    <Settings className="w-5 h-5" />
-                    <span className="font-medium">Settings</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>Settings</span>
                   </div>
                 </button>
               </li>
@@ -768,14 +679,12 @@ export default function Dashboard() {
           </nav>
         </aside>
 
-        {/* Enhanced Main Content */}
-        <main className="flex-1 p-8 bg-gray-50/50 dark:bg-gray-900/50 transition-colors duration-300">
-          <div className="max-w-7xl mx-auto">
-            {activeTab === 'overview' && renderOverview()}
-            {activeTab === 'devices' && renderDevices()}
-            {activeTab === 'verification' && renderAadharVerification()}
-            {activeTab === 'settings' && renderSettings()}
-          </div>
+        {/* Main Content */}
+        <main className="flex-1 p-6">
+          {activeTab === 'overview' && renderOverview()}
+          {activeTab === 'devices' && renderDevices()}
+          {activeTab === 'verification' && renderAadharVerification()}
+          {activeTab === 'settings' && renderSettings()}
         </main>
       </div>
     </div>
