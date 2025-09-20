@@ -61,7 +61,10 @@ export async function POST(request: NextRequest) {
       dateOfBirth: user.dateOfBirth,
       securityQuestion: user.securityQuestion,
       phoneNumber: user.phoneNumber,
-      profileComplete: user.profileComplete
+      profileComplete: user.profileComplete,
+      digilockerVerified: user.digilockerVerified,
+      digilockerVerificationCode: user.digilockerVerificationCode,
+      digilockerVerifiedAt: user.digilockerVerifiedAt
     };
 
     const response = NextResponse.json({
