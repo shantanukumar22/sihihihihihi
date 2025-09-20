@@ -1,5 +1,5 @@
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://sihihihihihi.vercel.app/api' 
+  ? 'https://sih-bu.vercel.app/api' 
   : 'http://localhost:3000/api';
 
 export interface ApiResponse<T = unknown> {
