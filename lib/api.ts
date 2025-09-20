@@ -144,4 +144,25 @@ export class ApiClient {
       body: JSON.stringify(fileIds),
     });
   }
+
+  // Electron App API Methods
+  static async electronLogin(credentials: {
+    email: string;
+    password: string;
+  }): Promise<ApiResponse<{ token: string }>> {
+    return this.request('/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+    });
+  }
+
+  static async electronVerifyDigiLocker(data: {
+    email: string;
+    verificationCode: string;
+  }): Promise<ApiResponse> {
+    return this.request('/verify-digilocker', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
 }
