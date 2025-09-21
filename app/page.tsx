@@ -502,10 +502,10 @@ export default function Home() {
               <div className="w-8 h-8 bg-slate-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">CW</span>
               </div>
-              <span className="text-xl font-semibold text-white">CleanWipe</span>
+              <span className="text-xl font-semibold text-white">SecureWipe</span>
             </div>
             <div className="text-slate-400 text-center md:text-right">
-              <p>&copy; 2024 CleanWipe. All rights reserved.</p>
+              <p>&copy; 2024 SecureWipe. All rights reserved.</p>
               <p className="text-sm mt-1">Promoting secure e-waste management across India</p>
             </div>
           </div>

@@ -1,4 +1,4 @@
-# CleanWipe API Documentation
+# SecureWipe API Documentation
 
 This is a Next.js application with a comprehensive API for user authentication, document verification, and DigiLocker integration.
 

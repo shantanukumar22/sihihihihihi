@@ -65,7 +65,7 @@ export default function Dashboard() {
                   <span className="text-white font-bold text-lg">CW</span>
                 </div>
                 <div>
-                  <span className="text-xl font-bold text-gray-900">CleanWipe</span>
+                  <span className="text-xl font-bold text-gray-900">SecureWipe</span>
                   <p className="text-xs text-gray-500">Digital India Initiative</p>
                 </div>
               </Link>

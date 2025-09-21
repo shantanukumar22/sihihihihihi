@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CleanWipe - Secure Data Erasure Solutions",
+  title: "SecureWipe - Secure Data Erasure Solutions",
   description: "Professional, secure, and verifiable data wiping for electronic devices. Promoting safe e-waste management and circular economy.",
 };
 
