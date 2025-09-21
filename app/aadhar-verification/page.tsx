@@ -248,7 +248,7 @@ const AadharVerificationPage = () => {
             <h3 className="font-semibold text-green-900 mb-2">Verification Code</h3>
             <p className="text-2xl font-mono text-green-800">{verificationCode}</p>
             <p className="text-sm text-green-600 mt-1">Save this code for your records</p>
-            <button
+            {/* <button
               onClick={async () => {
                 if (!verificationCode) return;
                 try {
@@ -276,7 +276,7 @@ const AadharVerificationPage = () => {
               className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
             >
               Save to Database
-            </button>
+            </button> */}
           </div>
 
           <div className="space-y-4">
