@@ -9,89 +9,8 @@ import TrueFocus from "@/components/ui/TrueFocus";
 import { useState, useEffect } from "react";
 import { CardSpotlight } from "@/components/ui/card-spotlight";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import GlobeDemo from "@/components/globe-demo";
 
-// E-Waste Crisis Graph Component
-const EWasteGraph = () => {
-  const [activeBar, setActiveBar] = useState(0);
-  
-  const data = [
-    { label: "E-waste Generated", value: 1750000, unit: "tonnes", color: "#475569", description: "Annual e-waste generation in India" },
-    { label: "IT Assets Hoarded", value: 50000, unit: "crore ₹", color: "#64748b", description: "Value of unused IT assets due to security concerns" },
-    { label: "Recycling Rate", value: 5, unit: "%", color: "#94a3b8", description: "Current e-waste recycling rate" },
-    { label: "Potential Recovery", value: 80, unit: "%", color: "#334155", description: "Potential recovery with proper sanitization" }
-  ];
-
-  // Create separate scaling for percentages vs large numbers
-  const scaledData = data.map(d => ({
-    ...d,
-    barHeight: d.unit === "%" ? d.value * 10 : 
-              d.label === "E-waste Generated" ? d.value / 3000 :  // Increase E-waste bar height
-              d.value / 10000  // Scale other large numbers down
-  }));
-
-  const maxValue = Math.max(...scaledData.map(d => d.barHeight));
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveBar((prev) => (prev + 1) % data.length);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [data.length]);
-
-  return (
-    <div className="h-full flex flex-col">
-      <div className="text-center mb-6">
-        <p className="text-neutral-300 text-sm">Real-time data visualization</p>
-      </div>
-      
-       <div className="flex-1 flex items-end justify-between space-x-4 px-4">
-         {scaledData.map((item, index) => (
-           <div key={index} className="flex-1 flex flex-col items-center group cursor-pointer"
-                onMouseEnter={() => setActiveBar(index)}>
-             <div className="relative flex flex-col items-center mb-2">
-               <div className={`text-xs font-semibold mb-1 transition-all duration-300 ${
-                 activeBar === index ? 'text-white scale-110' : 'text-neutral-400'
-               }`}>
-                 {item.value.toLocaleString()} {item.unit}
-               </div>
-               <div className={`text-xs transition-all duration-300 ${
-                 activeBar === index ? 'text-white' : 'text-neutral-500'
-               }`}>
-                 {item.label}
-               </div>
-             </div>
-             
-             <div className="w-full relative">
-               <div className="w-full bg-neutral-800 rounded-t-sm h-2 mb-2"></div>
-               <div 
-                 className={`w-full rounded-t-sm transition-all duration-1000 ease-out relative ${
-                   activeBar === index ? 'shadow-lg shadow-current/50' : ''
-                 }`}
-                 style={{
-                   height: `${Math.max((item.barHeight / maxValue) * 180 + 30, 40)}px`,
-                   backgroundColor: item.color,
-                   transform: activeBar === index ? 'scale(1.05)' : 'scale(1)',
-                   boxShadow: activeBar === index ? `0 0 20px ${item.color}50` : 'none'
-                 }}
-               >
-                 {activeBar === index && (
-                   <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-                     {item.description}
-                   </div>
-                 )}
-               </div>
-             </div>
-           </div>
-         ))}
-      </div>
-      
-      <div className="mt-4 text-center">
-       
-      </div>
-    </div>
-  );
-};
 
 // SecureWipe Bento Grid Component
 const SecureWipeBentoGrid = () => {
@@ -137,16 +56,16 @@ const SecureWipeBentoGrid = () => {
         </svg>
       ),
     },
-    {
-      title: "Enterprise Ready",
-      description: "Built for organizations managing large-scale IT asset disposal and data governance.",
-      header: <Skeleton imageUrl="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=500&h=300&fit=crop" />,
-      icon: (
-        <svg className="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-      ),
-    },
+    // {
+    //   title: "Enterprise Ready",
+    //   description: "Built for organizations managing large-scale IT asset disposal and data governance.",
+    //   header: <Skeleton imageUrl="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=500&h=300&fit=crop" />,
+    //   icon: (
+    //     <svg className="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24">
+    //       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+    //     </svg>
+    //   ),
+    // },
     {
       title: "Zero Data Recovery",
       description: "Advanced algorithms ensure complete data destruction beyond forensic recovery.",
@@ -157,16 +76,16 @@ const SecureWipeBentoGrid = () => {
         </svg>
       ),
     },
-    {
-      title: "Audit Trail Support",
-      description: "Comprehensive logging and reporting for regulatory compliance and internal audits.",
-      header: <Skeleton imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&h=300&fit=crop" />,
-      icon: (
-        <svg className="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-        </svg>
-      ),
-    },
+    // {
+    //   title: "Audit Trail Support",
+    //   description: "Comprehensive logging and reporting for regulatory compliance and internal audits.",
+    //   header: <Skeleton imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&h=300&fit=crop" />,
+    //   icon: (
+    //     <svg className="h-4 w-4 text-slate-500" fill="currentColor" viewBox="0 0 24 24">
+    //       <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+    //     </svg>
+    //   ),
+    // },
     {
       title: "Green Computing",
       description: "Enable safe e-waste recycling by removing data security barriers to device disposal.",
@@ -195,59 +114,13 @@ const SecureWipeBentoGrid = () => {
   );
 };
 
-// Loading icon component that cycles through different icons
-const LoadingIcon = () => {
-  const [currentIcon, setCurrentIcon] = useState(0);
-  
-  const icons = [
-    // Spinner
-    <svg key="spinner" className="w-8 h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-    </svg>,
-    // Dots
-    <svg key="dots" className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-      <circle cx="4" cy="12" r="3" className="animate-pulse">
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="12" cy="12" r="3" className="animate-pulse" style={{ animationDelay: '0.2s' }}>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="20" cy="12" r="3" className="animate-pulse" style={{ animationDelay: '0.4s' }}>
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
-      </circle>
-    </svg>,
-    // Shield
-    <svg key="shield" className="w-8 h-8 text-white animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-    </svg>,
-    // Lock
-    <svg key="lock" className="w-8 h-8 text-white animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-    </svg>
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIcon((prev) => (prev + 1) % icons.length);
-    }, 1000); // Change icon every second
-
-    return () => clearInterval(interval);
-  }, [icons.length]);
-
-  return (
-    <div className="transition-all duration-300">
-      {icons[currentIcon]}
-    </div>
-  );
-};
 
 export default function Home() {
-  const { user, isLoading } = useSession();
+  const { user } = useSession();
   const router = useRouter();
   const [userPlatform, setUserPlatform] = useState<'windows' | 'linux' | 'mac' | 'unknown'>('unknown');
 
-  // Detect user platform
+    // Detect user platform
   useEffect(() => {
     const detectPlatform = () => {
       const userAgent = navigator.userAgent.toLowerCase();
@@ -351,9 +224,9 @@ export default function Home() {
             {/* E-Waste Graph - 60% width (3/5 columns) */}
             <div className="md:col-span-3">
               <CardSpotlight className="h-96 w-full">
-                <EWasteGraph />
+                <GlobeDemo />
               </CardSpotlight>
-            </div>
+              </div>
             
             {/* Core Problem - 40% width (2/5 columns) */}
             <div className="md:col-span-2">
@@ -365,7 +238,7 @@ export default function Home() {
                 Most users hesitate to recycle their devices due to fear of data breaches.
                 Existing sanitization tools are either too complex, expensive, or lack
                 verifiable proof of erasure, creating a significant barrier to safe disposal.
-                    </p>
+              </p>
                     
                     <div className="space-y-3 mt-6">
                       <div className="flex gap-3 items-start">
@@ -472,8 +345,8 @@ export default function Home() {
                   <div className="relative">
                     <div className="w-16 h-16 bg-gradient-to-br from-slate-500 to-slate-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
                       <svg className="w-8 h-8 text-white group-hover:scale-110  " fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.351"/>
-                      </svg>
+                    <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.351"/>
+                  </svg>
                     </div>
                     {userPlatform === 'windows' && (
                       <div className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
@@ -482,16 +355,16 @@ export default function Home() {
                         </svg>
                       </div>
                     )}
-                  </div>
                 </div>
+              </div>
                 
                 {/* Title with Animation */}
                 <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-slate-600 transition-colors duration-300">
                   Windows
-                  {userPlatform === 'windows' && (
+                {userPlatform === 'windows' && (
                     <span className="ml-2 text-yellow-600 text-sm animate-pulse">✓ Recommended</span>
-                  )}
-                </h3>
+                )}
+              </h3>
                 
                 {/* Description */}
                 <p className="text-slate-600 text-sm mb-4 group-hover:text-slate-700 transition-colors duration-300">
@@ -516,13 +389,13 @@ export default function Home() {
                 
                 {/* Download Button with Animation */}
                 <button className="w-full px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-xl font-semibold hover:from-slate-700 hover:to-slate-800 transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-1 group/btn">
-                  <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center justify-center space-x-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
                     <span>Download Now</span>
-                  </div>
-                </button>
+                </div>
+              </button>
                 
                 {/* Version Info with Animation */}
                 <div className="mt-3 flex items-center justify-center space-x-2 text-xs text-slate-500">
@@ -554,8 +427,8 @@ export default function Home() {
                   <div className="relative">
                     <div className="w-16 h-16 bg-gradient-to-br from-slate-500 to-slate-700 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:-rotate-3 transition-all duration-300">
                       <svg className="w-8 h-8 text-white group-hover:scale-110  " fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 01-.088.069c-.104.105-.259.158-.436.158-.177 0-.33-.053-.435-.158-.105-.104-.158-.248-.158-.436 0-.179.053-.334.158-.439.105-.104.258-.158.435-.158h.002zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.197.301.197.518 0 .094-.018.284-.061.431-.045.148-.117.283-.212.388-.095.104-.223.156-.375.156-.154 0-.28-.052-.375-.156-.095-.105-.155-.24-.155-.388 0-.146.06-.284.155-.431.095-.146.221-.284.375-.431.154-.146.335-.222.511-.222h.005zm5.618 0c.178 0 .34.076.468.194.128.118.192.27.192.456 0 .186-.064.338-.192.456a.645.645 0 01-.468.194c-.178 0-.34-.076-.468-.194a.645.645 0 01-.192-.456c0-.186.064-.338.192-.456a.645.645 0 01.468-.194zm-3.313 2.020c.167 0 .31.085.413.167.104.082.186.18.186.319 0 .140-.082.237-.186.319-.103.082-.246.167-.413.167-.168 0-.31-.085-.414-.167-.103-.082-.186-.179-.186-.319 0-.14.083-.237.186-.319.104-.082.246-.167.414-.167zm.918 6.991c.18 0 .325.014.479.104.154.091.274.217.375.335.101.118.169.219.169.335 0 .116-.068.217-.169.335-.101.118-.221.244-.375.335-.154.09-.299.104-.479.104-.18 0-.325-.014-.479-.104-.154-.091-.274-.217-.375-.335-.101-.118-.169-.219-.169-.335 0-.116.068-.217.169-.335.101-.118.221-.244.375-.335.154-.09.299-.104.479-.104z"/>
-                      </svg>
+                    <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 01-.088.069c-.104.105-.259.158-.436.158-.177 0-.33-.053-.435-.158-.105-.104-.158-.248-.158-.436 0-.179.053-.334.158-.439.105-.104.258-.158.435-.158h.002zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.197.301.197.518 0 .094-.018.284-.061.431-.045.148-.117.283-.212.388-.095.104-.223.156-.375.156-.154 0-.28-.052-.375-.156-.095-.105-.155-.24-.155-.388 0-.146.06-.284.155-.431.095-.146.221-.284.375-.431.154-.146.335-.222.511-.222h.005zm5.618 0c.178 0 .34.076.468.194.128.118.192.27.192.456 0 .186-.064.338-.192.456a.645.645 0 01-.468.194c-.178 0-.34-.076-.468-.194a.645.645 0 01-.192-.456c0-.186.064-.338.192-.456a.645.645 0 01.468-.194zm-3.313 2.020c.167 0 .31.085.413.167.104.082.186.18.186.319 0 .140-.082.237-.186.319-.103.082-.246.167-.413.167-.168 0-.31-.085-.414-.167-.103-.082-.186-.179-.186-.319 0-.14.083-.237.186-.319.104-.082.246-.167.414-.167zm.918 6.991c.18 0 .325.014.479.104.154.091.274.217.375.335.101.118.169.219.169.335 0 .116-.068.217-.169.335-.101.118-.221.244-.375.335-.154.09-.299.104-.479.104-.18 0-.325-.014-.479-.104-.154-.091-.274-.217-.375-.335-.101-.118-.169-.219-.169-.335 0-.116.068-.217.169-.335.101-.118.221-.244.375-.335.154-.09.299-.104.479-.104z"/>
+                  </svg>
                     </div>
                     {userPlatform === 'linux' && (
                       <div className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
@@ -564,16 +437,16 @@ export default function Home() {
                         </svg>
                       </div>
                     )}
-                  </div>
                 </div>
+              </div>
                 
                 {/* Title with Animation */}
                 <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-slate-600 transition-colors duration-300">
                   Linux
-                  {userPlatform === 'linux' && (
+                {userPlatform === 'linux' && (
                     <span className="ml-2 text-yellow-600 text-sm animate-pulse">✓ Recommended</span>
-                  )}
-                </h3>
+                )}
+              </h3>
                 
                 {/* Description */}
                 <p className="text-slate-600 text-sm mb-4 group-hover:text-slate-700 transition-colors duration-300">
@@ -586,16 +459,16 @@ export default function Home() {
                     <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></div>
                     <span>Ubuntu/Debian/RHEL</span>
                   </div>
-                  <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center justify-center space-x-2">
                     <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
                     <span>Server Ready</span>
-                  </div>
+                </div>
                   <div className="flex items-center justify-center space-x-2">
                     <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                     <span>Open Source</span>
-                  </div>
-                </div>
-                
+            </div>
+          </div>
+
                 {/* Download Button with Animation */}
                 <button className="w-full px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-xl font-semibold hover:from-slate-700 hover:to-slate-800 transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-1 group/btn">
                   <div className="flex items-center justify-center space-x-2">
@@ -604,7 +477,7 @@ export default function Home() {
                     </svg>
                     <span>Download Now</span>
                   </div>
-                </button>
+            </button>
                 
                 {/* Version Info with Animation */}
                 <div className="mt-3 flex items-center justify-center space-x-2 text-xs text-slate-500">
@@ -617,7 +490,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-         
+
         </div>
       </section>
 
