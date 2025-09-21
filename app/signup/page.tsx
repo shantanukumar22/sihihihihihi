@@ -94,19 +94,7 @@ export default function SignUp() {
   };
 
   // Show loading state while session is being checked
-  if (sessionLoading) {
-    return (
-      <div className="min-h-screen bg-gray-300 flex items-center justify-center px-6">
-        <div className="text-center">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-6">
-            <span className="text-white font-bold text-2xl">SW</span>
-          </div>
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-700 font-medium">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-300 flex items-center justify-center px-6">
@@ -114,7 +102,7 @@ export default function SignUp() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-lg">SW</span>
             </div>
             <span className="text-3xl font-bold text-slate-900">SecureWipe</span>
@@ -139,7 +127,7 @@ export default function SignUp() {
                 name="officialName"
                 value={formData.officialName}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
                   errors.officialName ? 'border-red-400 bg-red-50 focus:ring-red-500' : 'border-slate-300 hover:border-slate-400 bg-white'
                 }`}
                 placeholder="Enter your official full name"
@@ -160,7 +148,7 @@ export default function SignUp() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
                   errors.email ? 'border-red-400 bg-red-50 focus:ring-red-500' : 'border-slate-300 hover:border-slate-400 bg-white'
                 }`}
                 placeholder="Enter your email address"
@@ -181,7 +169,7 @@ export default function SignUp() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
                   errors.password ? 'border-red-400 bg-red-50 focus:ring-red-500' : 'border-slate-300 hover:border-slate-400 bg-white'
                 }`}
                 placeholder="Create a secure password (min 8 characters)"
@@ -202,7 +190,7 @@ export default function SignUp() {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 text-slate-900 placeholder-slate-400 ${
                   errors.confirmPassword ? 'border-red-400 bg-red-50 focus:ring-red-500' : 'border-slate-300 hover:border-slate-400 bg-white'
                 }`}
                 placeholder="Confirm your password"
@@ -230,7 +218,7 @@ export default function SignUp() {
               className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 transform ${
                 isLoading 
                   ? 'bg-slate-400 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                  : 'bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
               }`}
             >
               {isLoading ? (
@@ -247,7 +235,7 @@ export default function SignUp() {
           <div className="mt-8 text-center">
             <p className="text-slate-600">
               Already have an account?{' '}
-              <Link href="/login" className="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-200">
+              <Link href="/login" className="text-slate-600 hover:text-slate-700 font-bold transition-colors duration-200">
                 Sign in
               </Link>
             </p>
