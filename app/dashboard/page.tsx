@@ -61,7 +61,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-center max-w-7xl mx-auto">
             <div className="flex items-center space-x-4">
               <Link href="/" className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-lg">SW</span>
                 </div>
                 <div>
