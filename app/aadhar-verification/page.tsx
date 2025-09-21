@@ -9,7 +9,9 @@ import {
   CheckCircle, 
   AlertCircle, 
   ExternalLink,
-  Loader
+  Loader,
+  Copy,
+  Check
 } from 'lucide-react';
 
 
@@ -29,6 +31,7 @@ const AadharVerificationPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  const [isCopied, setIsCopied] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -118,6 +121,27 @@ const AadharVerificationPage = () => {
       }
     } catch (error) {
       console.error('❌ Auto-save error:', error);
+    }
+  };
+
+  const handleCopyCode = async () => {
+    if (!verificationCode) return;
+    
+    try {
+      await navigator.clipboard.writeText(verificationCode);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+    } catch (error) {
+      console.error('Failed to copy code:', error);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = verificationCode;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
     }
   };
 
@@ -246,8 +270,31 @@ const AadharVerificationPage = () => {
         <div className="text-center space-y-6">
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
             <h3 className="font-semibold text-green-900 mb-2">Verification Code</h3>
-            <p className="text-2xl font-mono text-green-800">{verificationCode}</p>
-            <p className="text-sm text-green-600 mt-1">Save this code for your records</p>
+            <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-green-200">
+              <p className="text-2xl font-mono text-green-800 flex-1">{verificationCode}</p>
+              <button
+                onClick={handleCopyCode}
+                className={`ml-3 px-3 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 ${
+                  isCopied 
+                    ? 'bg-green-600 text-white' 
+                    : 'bg-green-100 text-green-700 hover:bg-green-200'
+                }`}
+                title={isCopied ? 'Copied!' : 'Copy code'}
+              >
+                {isCopied ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    Copy
+                  </>
+                )}
+              </button>
+            </div>
+            <p className="text-sm text-green-600 mt-2">Save this code for your records</p>
             {/* <button
               onClick={async () => {
                 if (!verificationCode) return;

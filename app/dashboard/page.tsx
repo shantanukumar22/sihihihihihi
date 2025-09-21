@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/session';
+import { Copy, Check } from 'lucide-react';
 
 export default function Dashboard() {
   const router = useRouter();
   const { user, isLoading, logout, refreshUser } = useSession();
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -40,6 +42,27 @@ export default function Dashboard() {
 
   const handleLogout = async () => {
     await logout();
+  };
+
+  const handleCopyCode = async () => {
+    if (!user?.digilockerVerificationCode) return;
+    
+    try {
+      await navigator.clipboard.writeText(user.digilockerVerificationCode);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+    } catch (error) {
+      console.error('Failed to copy code:', error);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = user.digilockerVerificationCode;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
   };
 
   if (isLoading) {
@@ -104,7 +127,30 @@ export default function Dashboard() {
                 {user?.digilockerVerificationCode && (
                   <div className="mb-6">
                     <p className="text-sm text-gray-600 mb-2">Verification Code</p>
-                    <p className="text-2xl font-mono font-bold text-gray-900">{user.digilockerVerificationCode}</p>
+                    <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+                      <p className="text-2xl font-mono font-bold text-gray-900 flex-1">{user.digilockerVerificationCode}</p>
+                      <button
+                        onClick={handleCopyCode}
+                        className={`ml-3 px-3 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 ${
+                          isCopied 
+                            ? 'bg-green-600 text-white' 
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                        title={isCopied ? 'Copied!' : 'Copy code'}
+                      >
+                        {isCopied ? (
+                          <>
+                            <Check className="w-4 h-4" />
+                            Copied!
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4" />
+                            Copy
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 )}
 
