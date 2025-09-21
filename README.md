@@ -466,7 +466,7 @@ const verifyResponse = await fetch('https://your-api-domain.com/api/verify-digil
   },
   body: JSON.stringify({
     email: 'john@example.com',
-    verificationCode: 'CW-1758341804753-OUWDBPTSV'
+    verificationCode: 'SW-1758341804753-OUWDBPTSV'
   })
 });
 

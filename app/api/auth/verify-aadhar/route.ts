@@ -40,12 +40,12 @@ export async function POST(request: NextRequest) {
         gender: 'Male',
         address: '123 Main Street, City, State, 12345',
         photo: 'base64_encoded_photo_data',
-        verificationCode: `CW-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+        verificationCode: `SW-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
       }
     };
 
     // Generate a unique verification code
-    const verificationCode = `CW-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    const verificationCode = `SW-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
     const response = NextResponse.json({
       success: true,

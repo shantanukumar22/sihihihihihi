@@ -163,7 +163,7 @@ export function validateOTP(otp: string): { isValid: boolean; error?: string } {
 export function generateVerificationCode(): string {
   const timestamp = Date.now().toString(36);
   const random = Math.random().toString(36).substr(2, 9).toUpperCase();
-  return `CW-${timestamp}-${random}`;
+  return `SW-${timestamp}-${random}`;
 }
 
 /**

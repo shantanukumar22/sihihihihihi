@@ -76,7 +76,7 @@ export default function ClosePage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-3">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">CW</span>
+              <span className="text-white font-bold text-lg">SW</span>
             </div>
             <span className="text-3xl font-bold text-slate-900">SecureWipe</span>
           </Link>

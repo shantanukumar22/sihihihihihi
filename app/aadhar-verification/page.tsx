@@ -95,7 +95,7 @@ const AadharVerificationPage = () => {
     // Open DigiLocker in new tab
     window.open(digiLockerData.url, '_blank');
     setCurrentStep('success');
-    const generatedCode = `CW-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    const generatedCode = `SW-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
     setVerificationCode(generatedCode);
     
     // Automatically save the verification code to database

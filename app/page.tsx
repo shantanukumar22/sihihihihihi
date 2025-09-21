@@ -500,7 +500,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
               <div className="w-8 h-8 bg-slate-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">CW</span>
+                <span className="text-white font-bold text-sm">SW</span>
               </div>
               <span className="text-xl font-semibold text-white">SecureWipe</span>
             </div>
